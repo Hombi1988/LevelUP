@@ -6,11 +6,11 @@
 <meta name="theme-color" content="#12171d">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Level Up">
+<meta name="apple-mobile-web-app-title" content="Level UP">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="icon" href="icon-192.png">
-<title>Level Up</title>
+<title>Level UP</title>
 <style>
 :root{
   --bg:#12171d; --card:#1a2129; --card2:#212a35; --text:#e6ebf0; --muted:#8b97a5; --line:#2a333e;
@@ -96,10 +96,25 @@ button:active{transform:scale(.97)}
 
 .empty{text-align:center;color:var(--muted);padding:40px 16px}
 .empty b{display:block;color:var(--text);font-size:17px;margin-bottom:6px}
-.welcome{margin:28px 4px 0;padding:22px 20px;border:1px solid rgba(62,207,142,.25);border-radius:16px;
-  background:linear-gradient(160deg,rgba(62,207,142,.08),var(--card) 55%)}
-.welcome h2{margin:0 0 12px;font-size:20px}
-.welcome h2 span{color:var(--accent)}
+.welcome{margin:28px 4px 0;padding:22px 20px;border:1.5px solid transparent;border-radius:16px;
+  /* Rand im gleichen Farbverlauf wie das UP im Logo */
+  background:linear-gradient(160deg,#1d2f31,var(--card) 55%) padding-box,
+    linear-gradient(135deg,#7cf5c0 0%,#3ecf8e 45%,#1fa8a0 100%) border-box;
+  box-shadow:0 0 10px rgba(62,207,142,.45),0 0 32px rgba(62,207,142,.28),inset 0 0 18px rgba(62,207,142,.08)}
+.w-head{margin:0 0 14px}
+.w-txt{display:block;font-size:15px;color:var(--muted);margin-bottom:6px}
+.w-logo{display:inline-flex;align-items:flex-end;gap:6px;line-height:1}
+.w-logo .lv{font-size:22px;font-weight:800;letter-spacing:.18em;line-height:22px;margin-bottom:2px}
+.w-logo .up{font-size:36px;font-weight:900;line-height:30px;
+  background:linear-gradient(135deg,#7cf5c0 0%,#3ecf8e 45%,#1fa8a0 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 0 10px rgba(62,207,142,.45))}
+.w-arr{width:20px;height:30px;margin-bottom:0;overflow:visible;filter:drop-shadow(0 0 6px rgba(62,207,142,.8))}
+.w-arr polyline{opacity:0;animation:steigen 1.8s ease-in-out infinite}
+.w-arr .a2{animation-delay:.6s}
+.w-arr .a3{animation-delay:1.2s}
+@keyframes steigen{0%{opacity:0;transform:translateY(10px)}35%{opacity:1}75%{opacity:.6}100%{opacity:0;transform:translateY(-8px)}}
+@media (prefers-reduced-motion:reduce){.w-arr polyline{animation:none;opacity:1}.w-arr .a2,.w-arr .a3{display:none}}
 .welcome p{margin:0 0 10px;color:var(--text);font-size:15px;line-height:1.5}
 .welcome .cta{margin-top:16px;font-weight:600}
 .welcome .cta b{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;
@@ -233,7 +248,7 @@ nav .dot{position:absolute;top:8px;left:calc(50% + 8px);width:8px;height:8px;bor
       <h3>Alles löschen</h3>
       <div class="stack"><button class="danger" id="alles-loeschen">Alle Einträge löschen</button></div>
     </div>
-    <div class="footer">Level Up · By René Homberger · v2.3</div>
+    <div class="footer">Level UP · By René Homberger · v2.5</div>
   </section>
 </main>
 
@@ -423,7 +438,11 @@ function renderListe(){
   list = sortiert(list);
   if (!state.eintraege.length){
     $('liste').innerHTML = '<div class="welcome">' +
-      '<h2>Willkommen bei <span>Level Up</span></h2>' +
+      '<div class="w-head"><span class="w-txt">Willkommen bei</span>' +
+        '<span class="w-logo"><span class="lv">LEVEL</span>' +
+        '<svg class="w-arr" viewBox="0 0 20 30" fill="none" stroke="#3ecf8e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+          '<polyline class="a1" points="3 18 10 11 17 18"/><polyline class="a2" points="3 18 10 11 17 18"/><polyline class="a3" points="3 18 10 11 17 18"/>' +
+        '</svg><span class="up">UP</span></span></div>' +
       '<p>Halte fest, was du erreicht hast: im Job, im Sport oder im Kopf.</p>' +
       '<p>So hast du deine Erfolge immer griffbereit, für das nächste Gespräch oder als Motivation für den nächsten Schritt.</p>' +
       '<p class="cta">Tippe auf <b>+</b> für deinen ersten Eintrag.</p>' +
@@ -665,7 +684,7 @@ function exportJSON(){
   let file = null;
   try{ file = new File([blob], name, { type:'application/json' }); }catch(e){}
   if (file && navigator.canShare && navigator.canShare({ files:[file] })){
-    navigator.share({ files:[file], title:'Level Up Backup' })
+    navigator.share({ files:[file], title:'Level UP Backup' })
       .then(() => { markiereBackup(); toast('Backup erstellt'); })
       .catch(() => {});
   } else {
@@ -709,7 +728,7 @@ $('alles-loeschen').addEventListener('click', () => {
 
 /* ---------- Start ---------- */
 render();
-if ('serviceWorker' in navigator && location.protocol === 'https:'){
+if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')){
   navigator.serviceWorker.register('sw.js').catch(() => {});
 }
 })();

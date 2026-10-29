@@ -1,5 +1,5 @@
-// Level Up – Offline-Cache. Bei jeder neuen Version CACHE hochzählen.
-const CACHE = 'levelup-v13';
+// Level UP – Offline-Cache. Bei jeder neuen Version CACHE hochzählen.
+const CACHE = 'levelup-v15';
 const DATEIEN = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', e => {
@@ -13,11 +13,11 @@ self.addEventListener('activate', e => {
   self.clients.claim();
 });
 
-// Zuerst Netz (damit Updates ankommen), sonst Cache (offline)
+// Immer zuerst die neueste Version vom Server (ohne Browser-Zwischenspeicher), sonst Cache (offline)
 self.addEventListener('fetch', e => {
-  if (e.request.method !== 'GET') return;
+  if (e.request.method !== 'GET' || !e.request.url.startsWith(self.location.origin)) return;
   e.respondWith(
-    fetch(e.request)
+    fetch(e.request.url, { cache: 'no-cache' })
       .then(r => {
         const kopie = r.clone();
         caches.open(CACHE).then(c => c.put(e.request, kopie)).catch(() => {});
