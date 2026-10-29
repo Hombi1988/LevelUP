@@ -35,7 +35,7 @@ header{position:sticky;top:0;z-index:5;background:rgba(18,23,29,.78);
   padding:calc(12px + env(safe-area-inset-top)) 16px 8px}
 header h1{margin:0;font-size:20px;letter-spacing:.16em;text-transform:uppercase;font-weight:800}
 .head-row{display:flex;align-items:center;gap:12px;min-height:46px}
-.head-row > :first-child:not(.hidden), .head-row h1{flex:1}
+.head-row h1{flex:1}
 .brand{display:flex;flex-direction:column}
 .brand-row{display:flex;align-items:flex-end;gap:6px;line-height:1}
 .brand .lv{font-size:22px;font-weight:800;letter-spacing:.18em;line-height:22px;margin-bottom:2px}
@@ -46,8 +46,8 @@ header h1{margin:0;font-size:20px;letter-spacing:.16em;text-transform:uppercase;
   -webkit-background-clip:text;background-clip:text;color:transparent;
   filter:drop-shadow(0 0 10px rgba(62,207,142,.45))}
 .brand .by{font-size:9.5px;color:var(--muted);letter-spacing:.1em;margin-top:5px;opacity:.85}
-.count{font:600 12px var(--mono);color:var(--muted);background:var(--card);border:1px solid var(--line);
-  padding:5px 10px;border-radius:999px;white-space:nowrap}
+.slogan{flex:1;min-width:0;text-align:right;white-space:nowrap;color:var(--muted);
+  font-size:clamp(10px,3.1vw,13px);letter-spacing:.05em;padding-top:4px}
 main{padding:12px 16px 16px;max-width:720px;margin:0 auto}
 .hidden{display:none!important}
 
@@ -132,6 +132,16 @@ nav button.on svg{filter:drop-shadow(0 0 6px rgba(62,207,142,.6))}
 .sheet-head h2{margin:0;font-size:18px}
 .toggle{display:flex;align-items:center;gap:10px;margin-top:16px;font-size:15px}
 .toggle input{width:22px;height:22px;accent-color:var(--accent)}
+input[type=date]{display:block;min-width:0;max-width:100%;min-height:46px;
+  -webkit-appearance:none;appearance:none;text-align:left}
+input[type=date]::-webkit-date-and-time-value{text-align:left}
+input[type=date]::-webkit-calendar-picker-indicator{filter:invert(.8)}
+select:invalid{color:var(--muted)}
+.fakten-btn{margin-top:16px;background:transparent;border:1px dashed var(--line);color:var(--accent);
+  width:100%;font-weight:600;text-align:left}
+.fakten-btn.open{border-style:solid;border-color:rgba(62,207,142,.35)}
+.fakten{border-left:2px solid rgba(62,207,142,.35);padding-left:12px;margin-top:4px}
+.toggle.wichtig{padding:14px 0 4px;margin-top:18px;border-top:1px solid var(--line)}
 
 .section{background:linear-gradient(160deg,var(--card2),var(--card));border:1px solid var(--line);border-radius:14px;padding:14px;margin:12px 0}
 .section h3{margin:0 0 8px;font-size:15px}
@@ -166,7 +176,7 @@ nav .dot{position:absolute;top:8px;left:calc(50% + 8px);width:8px;height:8px;bor
       <span class="by">by René Homberger</span>
     </div>
     <h1 id="title" class="hidden"></h1>
-    <div class="count" id="subtitle"></div>
+    <div class="slogan" id="slogan">Erfolge sichtbar machen.</div>
   </div>
 </header>
 
@@ -214,7 +224,7 @@ nav .dot{position:absolute;top:8px;left:calc(50% + 8px);width:8px;height:8px;bor
       <h3>Alles löschen</h3>
       <div class="stack"><button class="danger" id="alles-loeschen">Alle Einträge löschen</button></div>
     </div>
-    <div class="footer">Level Up · By René Homberger · v1.8</div>
+    <div class="footer">Level Up · By René Homberger · v2.2</div>
   </section>
 </main>
 
@@ -242,33 +252,31 @@ nav .dot{position:absolute;top:8px;left:calc(50% + 8px);width:8px;height:8px;bor
     </div>
 
     <label for="f-titel">Was hast du erreicht? *</label>
-    <input id="f-titel" maxlength="120" placeholder="z. B. Neue Schneidmaschine termingerecht ausgeliefert">
+    <input id="f-titel" maxlength="120" placeholder="z. B. Projekt abgeschlossen, Wettkampf gewonnen">
 
-    <div class="row">
-      <div>
-        <label for="f-datum">Datum</label>
-        <input id="f-datum" type="date">
-      </div>
-      <div>
-        <label for="f-kat">Kategorie</label>
-        <select id="f-kat"></select>
-      </div>
+    <label for="f-datum">Datum *</label>
+    <input id="f-datum" type="date">
+
+    <label for="f-kat">Kategorie *</label>
+    <select id="f-kat"></select>
+
+    <label for="f-aufgabe">Aufgabe</label>
+    <textarea id="f-aufgabe" placeholder="z. B. Projekt leiten, Wettkampf bestreiten, Präsentation halten"></textarea>
+
+    <label for="f-ergebnis">Ergebnis</label>
+    <textarea id="f-ergebnis" placeholder="z. B. termingerecht abgeschlossen, 2. Platz, sicher durchgezogen"></textarea>
+
+    <button type="button" class="fakten-btn" id="f-fakten-btn">+ Fakten</button>
+    <div id="f-fakten" class="fakten hidden">
+      <label for="f-kennzahl">Kennzahl</label>
+      <input id="f-kennzahl" placeholder="z. B. Durchlaufzeit −30 %, CHF 12'000 eingespart, 42:10 min">
+      <div class="hint">Wenn es eine Schätzung ist, schreib «ca.» dazu.</div>
+
+      <label for="f-beleg">Beleg</label>
+      <input id="f-beleg" placeholder="z. B. Abnahmeprotokoll, Mail vom Kunden, Rangliste">
     </div>
 
-    <label for="f-aufgabe">Ausgangslage / Aufgabe</label>
-    <textarea id="f-aufgabe" placeholder="Was war das Problem oder der Auftrag? Was war deine Rolle?"></textarea>
-
-    <label for="f-ergebnis">Ergebnis / Wirkung</label>
-    <textarea id="f-ergebnis" placeholder="Was hat sich dadurch verbessert? Für wen?"></textarea>
-
-    <label for="f-kennzahl">Kennzahl</label>
-    <input id="f-kennzahl" placeholder="z. B. Durchlaufzeit −30 %, CHF 12'000 eingespart">
-    <div class="hint">Zahlen wirken in Gesprächen am stärksten – wenn es eine Schätzung ist, schreib «ca.» dazu.</div>
-
-    <label for="f-beleg">Beleg / wer kann es bestätigen</label>
-    <input id="f-beleg" placeholder="z. B. Abnahmeprotokoll, Mail vom Kunden, Vorgesetzter">
-
-    <label class="toggle"><input type="checkbox" id="f-top"> Wichtig für Gespräche (★)</label>
+    <label class="toggle wichtig"><input type="checkbox" id="f-top"> Wichtig ★</label>
 
     <div class="stack" id="f-loeschen-wrap"><button class="danger" id="f-loeschen">Eintrag löschen</button></div>
   </div>
@@ -282,7 +290,8 @@ nav .dot{position:absolute;top:8px;left:calc(50% + 8px);width:8px;height:8px;bor
 
 const KEY = 'levelup.v1';
 const ALT_KEY = 'erfolgsjournal.v1';
-const DEFAULT_KAT = ['Konstruktion','Projektleitung','Führung','Kunde','Verbesserung','Weiterbildung'];
+const DEFAULT_KAT = ['Verbesserung','Weiterbildung','Führung','Mental','Wettkampf'];
+const ALTE_DEFAULT_KAT = ['Konstruktion','Projektleitung','Führung','Kunde','Verbesserung','Weiterbildung'];
 const BACKUP_TAGE = 30;
 
 /* ---------- Speicher ---------- */
@@ -291,7 +300,9 @@ function load(){
     const s = JSON.parse(localStorage.getItem(KEY) || localStorage.getItem(ALT_KEY));
     if (s && Array.isArray(s.eintraege)){
       return {
-        kategorien: Array.isArray(s.kategorien) && s.kategorien.length ? s.kategorien : DEFAULT_KAT.slice(),
+        // Unveränderte alte Startliste durch die neue ersetzen; eigene Anpassungen bleiben
+        kategorien: Array.isArray(s.kategorien) && s.kategorien.length &&
+          JSON.stringify(s.kategorien) !== JSON.stringify(ALTE_DEFAULT_KAT) ? s.kategorien : DEFAULT_KAT.slice(),
         eintraege: s.eintraege,
         letztesBackup: s.letztesBackup || null
       };
@@ -344,8 +355,7 @@ function zeige(v){
 document.querySelectorAll('nav button').forEach(b => b.addEventListener('click', () => zeige(b.dataset.view)));
 
 function render(){
-  const n = state.eintraege.length;
-  $('subtitle').textContent = n === 1 ? '1 Eintrag' : n + ' Einträge';
+  $('slogan').classList.toggle('hidden', ansicht !== 'liste');
   renderBackupHinweis();
   if (ansicht === 'liste') renderListe();
   if (ansicht === 'gespraech') renderGespraech();
@@ -495,7 +505,7 @@ $('g-teilen').addEventListener('click', () => {
   let txt = 'Erfolge – ' + zr + '\n\n';
   list.forEach(e => {
     txt += '• ' + datumCH(e.datum) + (e.kategorie ? ' [' + e.kategorie + ']' : '') + ' – ' + e.titel + '\n';
-    if (e.aufgabe) txt += '  Ausgangslage: ' + e.aufgabe + '\n';
+    if (e.aufgabe) txt += '  Aufgabe: ' + e.aufgabe + '\n';
     if (e.ergebnis) txt += '  Ergebnis: ' + e.ergebnis + '\n';
     if (e.kennzahl) txt += '  Kennzahl: ' + e.kennzahl + '\n';
     if (e.beleg) txt += '  Beleg: ' + e.beleg + '\n';
@@ -514,13 +524,18 @@ function oeffneFormular(id){
   bearbeiteId = id || null;
   const e = id ? state.eintraege.find(x => x.id === id) : null;
   $('f-titel-kopf').textContent = e ? 'Eintrag bearbeiten' : 'Neuer Eintrag';
-  $('f-kat').innerHTML = '<option value="">– keine –</option>' +
+  $('f-kat').required = true;
+  $('f-kat').innerHTML = '<option value="" disabled>Kategorie wählen</option>' +
     state.kategorien.map(k => '<option>' + esc(k) + '</option>').join('');
   if (e && e.kategorie && state.kategorien.indexOf(e.kategorie) < 0)
     $('f-kat').insertAdjacentHTML('beforeend', '<option>' + esc(e.kategorie) + '</option>');
   $('f-titel').value = e ? e.titel : '';
   $('f-datum').value = e ? (e.datum || '') : heute();
   $('f-kat').value = e ? (e.kategorie || '') : (filterKat !== 'alle' ? filterKat : '');
+  const hatFakten = !!(e && (e.kennzahl || e.beleg));
+  $('f-fakten').classList.toggle('hidden', !hatFakten);
+  $('f-fakten-btn').classList.toggle('open', hatFakten);
+  $('f-fakten-btn').textContent = hatFakten ? '− Fakten' : '+ Fakten';
   $('f-aufgabe').value = e ? (e.aufgabe || '') : '';
   $('f-ergebnis').value = e ? (e.ergebnis || '') : '';
   $('f-kennzahl').value = e ? (e.kennzahl || '') : '';
@@ -539,12 +554,20 @@ function schliesseFormular(){
 }
 $('fab').addEventListener('click', () => oeffneFormular(null));
 $('f-abbrechen').addEventListener('click', schliesseFormular);
+$('f-fakten-btn').addEventListener('click', () => {
+  const zu = $('f-fakten').classList.toggle('hidden');
+  $('f-fakten-btn').classList.toggle('open', !zu);
+  $('f-fakten-btn').textContent = zu ? '+ Fakten' : '− Fakten';
+  if (!zu) $('f-kennzahl').focus();
+});
 $('f-speichern').addEventListener('click', () => {
   const t = $('f-titel').value.trim();
   if (!t){ toast('Bitte erfasse, was du erreicht hast'); $('f-titel').focus(); return; }
+  if (!$('f-datum').value){ toast('Bitte ein Datum wählen'); $('f-datum').focus(); return; }
+  if (!$('f-kat').value){ toast('Bitte eine Kategorie wählen'); $('f-kat').focus(); return; }
   const daten = {
     titel: t,
-    datum: $('f-datum').value || heute(),
+    datum: $('f-datum').value,
     kategorie: $('f-kat').value,
     aufgabe: $('f-aufgabe').value.trim(),
     ergebnis: $('f-ergebnis').value.trim(),
