@@ -1,0 +1,16 @@
+{
+  "name": "Level Up",
+  "short_name": "Level Up",
+  "description": "Erreichtes festhalten – griffbereit für Gespräche und Verhandlungen",
+  "lang": "de-CH",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#12171d",
+  "theme_color": "#12171d",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
