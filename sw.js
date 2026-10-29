@@ -1,5 +1,5 @@
 // Level UP – Offline-Cache. Bei jeder neuen Version CACHE hochzählen.
-const CACHE = 'levelup-v15';
+const CACHE = 'levelup-v16';
 const DATEIEN = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', e => {
